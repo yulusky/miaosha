@@ -27,7 +27,15 @@ public class MiaoshaUserService {
 	RedisService redisService;
 	public static final String COOKIE_TOKEN_NAME = "token";
 	public MiaoshaUser getById(long id) {
-		return miaoshaUserDao.getById(id);
+		MiaoshaUser user=redisService.get(MiaoshaUserKey.getById, ""+id, MiaoshaUser.class);
+		if (user!=null) {
+			return user;
+		}
+		user=miaoshaUserDao.getById(id);
+		if (user!=null) {
+			redisService.set(MiaoshaUserKey.getById, ""+id, user);
+		}
+		return user;
 	}
 	public MiaoshaUser getByToken(HttpServletResponse response, String token) {
 		if(StringUtils.isEmpty(token)) {

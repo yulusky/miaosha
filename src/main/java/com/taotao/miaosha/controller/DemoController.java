@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.taotao.miaosha.domain.User;
+import com.taotao.miaosha.rabbitmq.MQSender;
 import com.taotao.miaosha.redis.RedisService;
 import com.taotao.miaosha.redis.UserKey;
 import com.taotao.miaosha.result.CodeMsg;
@@ -22,6 +23,9 @@ public class DemoController {
 	
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	MQSender mQSender;
 	@RequestMapping("/")
 	@ResponseBody
 	public String index()
@@ -70,6 +74,12 @@ public class DemoController {
 	public Result<Boolean> redisSet(){
 		User user=new User(123, "yuxu");
 		redisService.set(UserKey.getById, ""+123, user);
+		return Result.success(true);
+	}
+	@RequestMapping("/mq")
+	@ResponseBody
+	public Result<Boolean> mq() {
+		mQSender.send("Wings you're the hero,路飞是成为海贼王的男人！");
 		return Result.success(true);
 	}
 }
