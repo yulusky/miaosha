@@ -15,12 +15,14 @@ public class GoodsService {
 	@Autowired
 	GoodsDao goodsDao;
 	
-	public List<GoodsVo> listGoodsVo() {
+	public List<GoodsVo> listGoodsVo(){
 		return goodsDao.listGoodsVo();
 	}
+
 	public GoodsVo getGoodsVoByGoodsId(long goodsId) {
 		return goodsDao.getGoodsVoByGoodsId(goodsId);
 	}
+
 	public boolean reduceStock(GoodsVo goods) {
 		MiaoshaGoods g = new MiaoshaGoods();
 		g.setGoodsId(goods.getId());
@@ -36,4 +38,7 @@ public class GoodsService {
 			goodsDao.resetStock(g);
 		}
 	}
+	
+	
+	
 }

@@ -21,7 +21,7 @@ import com.taotao.miaosha.redis.RedisService;
 import com.taotao.miaosha.util.Md5Util;
 import com.taotao.miaosha.util.UUIDUtil;
 import com.taotao.miaosha.vo.GoodsVo;
-
+@SuppressWarnings("restriction")
 @Service
 public class MiaoshaService {
 	

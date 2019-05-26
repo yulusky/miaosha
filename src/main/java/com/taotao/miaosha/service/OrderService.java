@@ -16,19 +16,22 @@ import com.taotao.miaosha.vo.GoodsVo;
 
 @Service
 public class OrderService {
+	
 	@Autowired
 	OrderDao orderDao;
-
+	
 	@Autowired
 	RedisService redisService;
+	
 	public MiaoshaOrder getMiaoshaOrderByUserIdGoodsId(long userId, long goodsId) {
-		MiaoshaOrder miaoshaOrder=redisService.get(OrderKey.getMiaoshaOrderByUidGid, 
-				""+userId+"_"+goodsId, MiaoshaOrder.class);
-		if (miaoshaOrder!=null) {
-			return miaoshaOrder;
-		}
-		return orderDao.getMiaoshaOrderByUserIdGoodsId(userId, goodsId);
+		//return orderDao.getMiaoshaOrderByUserIdGoodsId(userId, goodsId);
+		return redisService.get(OrderKey.getMiaoshaOrderByUidGid, ""+userId+"_"+goodsId, MiaoshaOrder.class);
 	}
+	
+	public OrderInfo getOrderById(long orderId) {
+		return orderDao.getOrderById(orderId);
+	}
+	
 
 	@Transactional
 	public OrderInfo createOrder(MiaoshaUser user, GoodsVo goods) {
@@ -42,24 +45,22 @@ public class OrderService {
 		orderInfo.setOrderChannel(1);
 		orderInfo.setStatus(0);
 		orderInfo.setUserId(user.getId());
-		long orderId = orderDao.insert(orderInfo);
+		orderDao.insert(orderInfo);
 		MiaoshaOrder miaoshaOrder = new MiaoshaOrder();
 		miaoshaOrder.setGoodsId(goods.getId());
-		miaoshaOrder.setOrderId(orderId);
+		miaoshaOrder.setOrderId(orderInfo.getId());
 		miaoshaOrder.setUserId(user.getId());
 		orderDao.insertMiaoshaOrder(miaoshaOrder);
-		redisService.set(OrderKey.getMiaoshaOrderByUidGid, 
-				""+user.getId()+"_"+goods.getId(), miaoshaOrder);
+		
+		redisService.set(OrderKey.getMiaoshaOrderByUidGid, ""+user.getId()+"_"+goods.getId(), miaoshaOrder);
+		 
 		return orderInfo;
-	}
-
-	public OrderInfo getOrderById(long orderId) {
-		return orderDao.getOrderById(orderId);
 	}
 
 	public void deleteOrders() {
 		orderDao.deleteOrders();
 		orderDao.deleteMiaoshaOrders();
 	}
-	
+
 }
+

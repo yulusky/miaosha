@@ -22,23 +22,28 @@ import com.taotao.miaosha.redis.GoodsKey;
 import com.taotao.miaosha.redis.RedisService;
 import com.taotao.miaosha.result.Result;
 import com.taotao.miaosha.service.GoodsService;
+import com.taotao.miaosha.service.MiaoshaUserService;
 import com.taotao.miaosha.vo.GoodsDetailVo;
 import com.taotao.miaosha.vo.GoodsVo;;
  
 @Controller
 @RequestMapping("/goods")
 public class GoodsController {
+
 	@Autowired
-	GoodsService goodsService;
+	MiaoshaUserService userService;
 	
 	@Autowired
 	RedisService redisService;
 	
 	@Autowired
-	ApplicationContext applicationContext;
+	GoodsService goodsService;
 	
 	@Autowired
 	ThymeleafViewResolver thymeleafViewResolver;
+	
+	@Autowired
+	ApplicationContext applicationContext;
 	
 	/**
 	 * QPS:1267 load:15 mysql
@@ -50,22 +55,23 @@ public class GoodsController {
     public String list(HttpServletRequest request, HttpServletResponse response, Model model,MiaoshaUser user) {
     	model.addAttribute("user", user);
     	//取缓存
-    	String html = redisService.get(GoodsKey.getGoodsList, "", String.class);
-    	if(!StringUtils.isEmpty(html)) {
-    		return html;
-    	}
+//    	String html = redisService.get(GoodsKey.getGoodsList, "", String.class);
+//    	if(!StringUtils.isEmpty(html)) {
+//    		return html;
+//    	}
     	List<GoodsVo> goodsList = goodsService.listGoodsVo();
     	model.addAttribute("goodsList", goodsList);
 //    	 return "goods_list";
     	SpringWebContext ctx = new SpringWebContext(request,response,
     			request.getServletContext(),request.getLocale(), model.asMap(), applicationContext );
     	//手动渲染
-    	html = thymeleafViewResolver.getTemplateEngine().process("goods_list", ctx);
+    	String html = thymeleafViewResolver.getTemplateEngine().process("goods_list", ctx);
     	if(!StringUtils.isEmpty(html)) {
     		redisService.set(GoodsKey.getGoodsList, "", html);
     	}
     	return html;
     }
+    
     @RequestMapping(value="/to_detail2/{goodsId}",produces="text/html")
     @ResponseBody
     public String detail2(HttpServletRequest request, HttpServletResponse response, Model model,MiaoshaUser user,
@@ -138,5 +144,6 @@ public class GoodsController {
     	return Result.success(vo);
     }
     
-		
+    
 }
+
