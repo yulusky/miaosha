@@ -44,6 +44,10 @@
 
 ![](./pic/搜狗截图20190621094523.jpg)
 
+![](E:\ecli_proj\miaosha1\docs\pic\miaosha.png)
+
+![](E:\ecli_proj\miaosha1\docs\pic\miaoshafuture.png)
+
 ## 秒杀流程 
 
 ![秒杀流程](./pic/秒杀流程图.jpg)
@@ -624,3 +628,4 @@ key为URL+userId，值为访问的次数，存活时间为限流规定的时间
 
 [秒杀系统视频笔记](https://blog.csdn.net/qq_41305266?t=1)
 
+[秒杀抢购系统优化思路详解](https://www.jianshu.com/p/b5807229ac5c)
