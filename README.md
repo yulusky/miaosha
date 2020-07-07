@@ -792,3 +792,5 @@ redis QPS：上万
 [Java高并发秒杀系统【观后总结】](https://cloud.tencent.com/developer/article/1062954)
 
 [悲观锁和乐观锁解决超卖问题](https://www.jianshu.com/p/f5ff017db62a)
+
+[高性能秒杀系统的设计思考，超详细！](https://www.jianshu.com/p/0422a195f54a)
